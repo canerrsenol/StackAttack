@@ -22,6 +22,7 @@ public class PlayerVisualFollow : MonoBehaviour
         float xDiff = targetTransform.localPosition.x - transform.localPosition.x;
         float targetTilt = -Mathf.Clamp(xDiff, -1f, 1f) * tiltAmount;
         currentTilt = Mathf.Lerp(currentTilt, targetTilt, Time.deltaTime * followSpeed);
-        transform.localRotation = Quaternion.Euler(0f, 0f, currentTilt);
+        // Aynı xDiff değerinden hesaplanan eğilmeyi hem Y hem Z eksenine uygula
+        transform.localRotation = Quaternion.Euler(0f, -currentTilt, currentTilt);
     }
 }
