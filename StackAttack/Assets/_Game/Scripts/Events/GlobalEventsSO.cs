@@ -5,9 +5,17 @@ using UnityEngine;
 public class GlobalEventsSO : ScriptableObject
 {
     public UIEvents UIEvents = new UIEvents();
+    public PlayerEvents PlayerEvents = new PlayerEvents();
 }
 
 public class UIEvents
 {
     public Action<int> RemainingTime;
+    public Action<float> ProgressBarChanged;
+}
+
+public class PlayerEvents
+{
+    public Action<int> HealthChanged;
+    public Action<float> zPositionChanged;
 }

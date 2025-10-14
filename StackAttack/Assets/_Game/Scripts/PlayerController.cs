@@ -6,9 +6,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float borderLimit = 10f;
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private float swipeDeadzone = 10f; // pixel cinsinden deadzone
+    [SerializeField] private float swipeDeadzone = 10f;
     private bool isTouching = false;
-
 
     void OnEnable()
     {

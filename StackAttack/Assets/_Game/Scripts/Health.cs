@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int maxHealth = 100;
+    [SerializeField] private GlobalEventsSO globalEventsSO;
+    [SerializeField] private int maxHealth = 100;
     private int currentHealth;
 
     void Start()
@@ -13,6 +14,9 @@ public class Health : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        globalEventsSO.PlayerEvents.HealthChanged?.Invoke(currentHealth);
+        
         if (currentHealth <= 0)
         {
             Die();
@@ -21,8 +25,7 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        // Ölüm işlemleri burada yapılabilir
         Debug.Log($"{gameObject.name} has died.");
-        Destroy(gameObject);
+        GameManager.Instance.ChangeGameState(GameState.Lose);
     }
 }

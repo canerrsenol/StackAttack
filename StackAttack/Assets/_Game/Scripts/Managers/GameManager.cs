@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-//using PrimeTween;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -23,7 +22,6 @@ public class GameManager : MonoSingleton<GameManager>
         switch (newGameState)
         {
             case GameState.Initialized:
-                //Tween.Delay(1f, () => ChangeGameState(GameState.Started));
             victoryConfetti.SetActive(false);
                 break;
             case GameState.Started:
@@ -42,7 +40,6 @@ public class GameManager : MonoSingleton<GameManager>
 
 public enum GameState
 {
-    Splash,
     Initialized,
     Started,
     Win,

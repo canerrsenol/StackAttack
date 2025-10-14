@@ -15,9 +15,6 @@ public class SaveLoad : MonoBehaviour
         if (!PlayerPrefs.HasKey(playerSaveName))
         {
             playerProgress = new PlayerProgress();
-            playerProgress.gold = 0;
-            playerProgress.hapticsOn = true;
-            playerProgress.soundOn = true;
             playerProgress.currentLevel = 0;
             playerProgress.secondLevelListIndex = 0;
             
