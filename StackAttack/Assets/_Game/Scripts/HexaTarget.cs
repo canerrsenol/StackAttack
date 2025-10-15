@@ -9,6 +9,7 @@ using UnityEditor;
 public class HexaTarget : MonoBehaviour, IHitable
 {
     [SerializeField] private int health = 3;
+    [SerializeField] private int damage = 20;
     [SerializeField] private HexaColors hexaColors;
     [SerializeField] private GameObject hexaVisual;
     [SerializeField] private TextMeshPro healthText;

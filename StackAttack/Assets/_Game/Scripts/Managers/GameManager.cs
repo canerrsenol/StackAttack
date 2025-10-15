@@ -4,10 +4,8 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     public GameState GameState;
-    public event Action<GameState> OnGameStateChanged;
-    public GlobalEventsSO globalEvents;
-
-    [SerializeField] private GameObject victoryConfetti;
+    [HideInInspector] public event Action<GameState> OnGameStateChanged;
+    [SerializeField] GlobalEventsSO globalEvents;
  
     public void CompleteLevel()
     {
@@ -22,12 +20,10 @@ public class GameManager : MonoSingleton<GameManager>
         switch (newGameState)
         {
             case GameState.Initialized:
-            victoryConfetti.SetActive(false);
                 break;
             case GameState.Started:
                 break;
             case GameState.Win:
-            victoryConfetti.SetActive(true);
                 break;
             case GameState.Lose:
                 break;
@@ -40,6 +36,7 @@ public class GameManager : MonoSingleton<GameManager>
 
 public enum GameState
 {
+    Splash,
     Initialized,
     Started,
     Win,

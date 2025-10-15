@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        //LoadLevel();
+        LoadLevel();
     }
 
     private void Update()

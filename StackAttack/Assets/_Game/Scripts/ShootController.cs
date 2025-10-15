@@ -11,8 +11,11 @@ public class ShootController : MonoBehaviour
     private bool isShooting;
     private float shootCooldown;
 
+    private GameManager gameManager;
+
     void Awake()
     {
+        gameManager = GameManager.Instance;
         bulletPool = BulletPool.Instance;
     }
 
@@ -42,6 +45,8 @@ public class ShootController : MonoBehaviour
 
     void Update()
     {
+        if (gameManager.GameState != GameState.Started) return;
+
         if (isShooting)
         {
             shootCooldown -= Time.deltaTime;
