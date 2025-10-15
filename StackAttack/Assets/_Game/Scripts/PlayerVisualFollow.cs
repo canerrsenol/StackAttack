@@ -8,6 +8,13 @@ public class PlayerVisualFollow : MonoBehaviour
     private float currentTilt = 0f;
     private float velocity = 0f;
 
+    private Health health;
+
+    void Awake()
+    {
+        health = GetComponentInParent<Health>();
+    }
+
     void Update()
     {
         if (targetTransform == null) return;
@@ -24,5 +31,10 @@ public class PlayerVisualFollow : MonoBehaviour
         currentTilt = Mathf.Lerp(currentTilt, targetTilt, Time.deltaTime * followSpeed);
         // Aynı xDiff değerinden hesaplanan eğilmeyi hem Y hem Z eksenine uygula
         transform.localRotation = Quaternion.Euler(0f, -currentTilt, currentTilt);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        
     }
 }

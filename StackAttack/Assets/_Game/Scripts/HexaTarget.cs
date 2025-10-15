@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public class HexaTarget : MonoBehaviour, IHitable
+public class HexaTarget : MonoBehaviour, IHitable, IObstacle
 {
     [SerializeField] private int health = 3;
-    [SerializeField] private int damage = 20;
+    [SerializeField] private int crashDamage = 20;
     [SerializeField] private HexaColors hexaColors;
     [SerializeField] private GameObject hexaVisual;
     [SerializeField] private TextMeshPro healthText;
@@ -17,6 +18,7 @@ public class HexaTarget : MonoBehaviour, IHitable
     [SerializeField] private int hexaHealthMultiplier = 5;
     [SerializeField, HideInInspector] private List<MeshRenderer> hexaVisualMeshRenderers = new List<MeshRenderer>();
     [SerializeField] private MaterialsSO materialsSO;
+    public int CrashDamage => crashDamage;
 
     void Awake()
     {
@@ -45,10 +47,27 @@ public class HexaTarget : MonoBehaviour, IHitable
 
     public void Hit(float damage)
     {
-        Debug.Log($"HexaTarget was hit! Damage: {damage}");
-
         var sequence = DOTween.Sequence();
-        sequence.Append(transform.DOPunchScale(Vector3.one * 0.2f, 0.1f, 1, 0.5f));
+        sequence.Append(transform.DOPunchScale(new Vector3(0.1f, .7f, 0.1f), 0.2f, 1, 0.5f));
+
+        if(hexaVisualMeshRenderers.Count > 0)
+        {
+            foreach (var meshRenderer in hexaVisualMeshRenderers)
+            {
+                // Vurulduklarında efekt olması için rengi biraz açıp  tekrar kapatıyoruz.
+
+                var sharedMaterial = meshRenderer.sharedMaterial;
+                var originalColor = sharedMaterial.GetColor("_BaseColor");
+                var hitColor = Color.gray;
+
+                sequence.Join(meshRenderer.material.DOColor(hitColor, "_BaseColor", 0.1f).SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    meshRenderer.material.DOColor(originalColor, "_BaseColor", 0.1f).SetEase(Ease.InQuad);
+                }));
+            }
+        }
+
         sequence.AppendCallback(() =>
         {
             health = Mathf.Max(0, health - (int)damage);
@@ -61,10 +80,6 @@ public class HexaTarget : MonoBehaviour, IHitable
         });
     }
 
-    public int GetDamage()
-    {
-        return health;
-    }
 
     private void SyncHealthVisuals()
     {
@@ -222,5 +237,10 @@ public class HexaTarget : MonoBehaviour, IHitable
 #endif
 
         Destroy(spawnedObject);
+    }
+
+    public void Crashed()
+    {
+        Destroy(gameObject);
     }
 }

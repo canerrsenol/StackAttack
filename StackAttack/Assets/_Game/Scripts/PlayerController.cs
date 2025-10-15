@@ -6,8 +6,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float forwardSpeed = 5f;
     [SerializeField] private float horizontalSpeed = 5f;
     [SerializeField] private float borderLimit = 10f;
-    [SerializeField] private Transform playerTransform;
     [SerializeField] private float swipeDeadzone = 10f;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private GlobalEventsSO globalEventsSO;
     private bool isTouching = false;
     private GameManager gameManager;
 
@@ -33,14 +34,12 @@ public class PlayerController : MonoBehaviour
     private void HandleFingerUpdate(LeanFinger finger)
     {
         if (gameManager.GameState != GameState.Started) return;
-        transform.position = transform.position + Vector3.forward * forwardSpeed * Time.deltaTime;
-        
+
         if (!isTouching) return;
         if (finger.IsOverGui) return;
 
         Vector2 delta = finger.ScaledDelta;
-        
-        // Deadzone kontrolü
+
         if (delta.magnitude < swipeDeadzone)
         {
             return;
@@ -53,5 +52,12 @@ public class PlayerController : MonoBehaviour
         newPosition.z = Mathf.Clamp(newPosition.z, -borderLimit, borderLimit);
 
         playerTransform.localPosition = newPosition;
+    }
+    
+    private void Update()
+    {
+        if (gameManager.GameState != GameState.Started) return;
+        transform.position += Vector3.forward * forwardSpeed * Time.deltaTime;
+        globalEventsSO.PlayerEvents.zPositionChanged?.Invoke(transform.position.z);
     }
 }

@@ -11,7 +11,6 @@ public class GlobalEventsSO : ScriptableObject
 public class UIEvents
 {
     public Action<int> RemainingTime;
-    public Action<float> ProgressBarChanged;
 }
 
 public class PlayerEvents

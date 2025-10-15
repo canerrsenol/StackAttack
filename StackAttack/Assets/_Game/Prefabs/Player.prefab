@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8583086828062352972}
+  - component: {fileID: 1917064211071889135}
+  - component: {fileID: 7324848747617851759}
+  - component: {fileID: 8112167207689025727}
   m_Layer: 0
   m_Name: Player_Inside
   m_TagString: Untagged
@@ -32,6 +35,68 @@ Transform:
   - {fileID: 7458890015424596361}
   m_Father: {fileID: 2035401818808569382}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1917064211071889135
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921091557055189766}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!54 &7324848747617851759
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921091557055189766}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!114 &8112167207689025727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921091557055189766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372ef68952f024f41b4c3347d5d1a9b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2814743432055616204
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,9 +108,10 @@ GameObject:
   - component: {fileID: 2035401818808569382}
   - component: {fileID: 5278799447270331479}
   - component: {fileID: 7120289923253575287}
-  m_Layer: 0
+  - component: {fileID: 7868576023294500824}
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,8 +149,9 @@ MonoBehaviour:
   forwardSpeed: 2
   horizontalSpeed: 5
   borderLimit: 6
-  playerTransform: {fileID: 8583086828062352972}
   swipeDeadzone: 1.5
+  playerTransform: {fileID: 8583086828062352972}
+  globalEventsSO: {fileID: 11400000, guid: 9b252681ecc8fff4fa8a91171a5b2f38, type: 2}
 --- !u!114 &7120289923253575287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,6 +167,20 @@ MonoBehaviour:
   shootInterval: 0.5
   shootPoint: {fileID: 7458890015424596361}
   shootForce: 20
+--- !u!114 &7868576023294500824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2814743432055616204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc75bc6520270bf489d21f05759e08cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalEventsSO: {fileID: 11400000, guid: 9b252681ecc8fff4fa8a91171a5b2f38, type: 2}
+  maxHealth: 100
 --- !u!1 &3289318945870553594
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,13 +206,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3289318945870553594}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.53729963, y: -0, z: -0, w: 0.8433915}
-  m_LocalPosition: {x: 0, y: 18, z: 0}
+  m_LocalRotation: {x: 0.50686145, y: 0, z: 0, w: 0.86202747}
+  m_LocalPosition: {x: 0, y: 20.2, z: -2.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2035401818808569382}
-  m_LocalEulerAnglesHint: {x: 65, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60.91, y: 0, z: 0}
 --- !u!114 &146343450501908316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +238,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 18.4
+    OrthographicSize: 17.5
     NearClipPlane: 0.3
     FarClipPlane: 100
     Dutch: 0

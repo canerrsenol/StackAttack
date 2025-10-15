@@ -33,8 +33,11 @@ public class FinishArea : MonoBehaviour
         }
     }
 
-    private void OnZPositionChanged(float progress)
+    private void OnZPositionChanged(float playerCurrentZ)
     {
-        fillImage.fillAmount = Mathf.Clamp01(progress);
+        // Oyuncunun Z pozisyonuna göre ilerleme yüzdesini hesapla oyuncu 0 dan başlayıp FinishArea'nın Z pozisyonuna kadar ilerliyor
+        float finishZ = transform.position.z;
+        float progress = Mathf.InverseLerp(0f, finishZ, playerCurrentZ);
+        fillImage.fillAmount = progress;
     }
 }
