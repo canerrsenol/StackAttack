@@ -51,6 +51,12 @@ public abstract class GenericPoolBase<TPool, TObject> : MonoSingleton<TPool>
 			return;
 		}
 
+		// Avoid releasing the same instance multiple times
+		if (instance.gameObject.activeSelf == false)
+		{
+			return;
+		}
+
 		_pool.Release(instance);
 	}
 

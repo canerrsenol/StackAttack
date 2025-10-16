@@ -6,6 +6,8 @@ public class Bullet : ProjectileBase
     [SerializeField] private float speed = 10f;
     private BulletPool bulletPool;
     private Rigidbody rb;
+    private float arrivedTime = 0f;
+    [SerializeField] private float lifeTime = 1.5f;
 
     void Awake()
     {
@@ -21,13 +23,20 @@ public class Bullet : ProjectileBase
             rb.linearVelocity = transform.forward * speed;
         }
 
+        arrivedTime = 0f;
     }
 
-    void OnDisable()
+    void Update()
     {
-        StopAllCoroutines();
+        arrivedTime += Time.deltaTime;
+        if (arrivedTime >= lifeTime)
+        {
+            arrivedTime = 0f;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            bulletPool.ReleaseBullet(this);
+        }
     }
-
 
     void OnTriggerEnter(Collider other)
     {
@@ -37,7 +46,6 @@ public class Bullet : ProjectileBase
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
-            StopAllCoroutines();
             bulletPool.ReleaseBullet(this);
         }
     }

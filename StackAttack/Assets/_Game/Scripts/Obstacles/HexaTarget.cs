@@ -20,6 +20,9 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
     [SerializeField] private MaterialsSO materialsSO;
     public int CrashDamage => crashDamage;
 
+    private readonly List<Material> animatedMaterials = new List<Material>();
+    private Sequence hitSequence;
+
     void Awake()
     {
         if (CanSyncVisuals())
@@ -45,41 +48,84 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
         SyncHealthVisuals();
     }
 
+    void Update()
+    {
+        transform.forward = Vector3.forward;
+    }
+
     public void Hit(float damage)
     {
-        var sequence = DOTween.Sequence();
-        sequence.Append(transform.DOPunchScale(new Vector3(0.1f, .7f, 0.1f), 0.2f, 1, 0.5f));
+        StopActiveTweens();
+
+        hitSequence = DOTween.Sequence();
+        hitSequence.Append(transform.DOPunchScale(new Vector3(0.1f, .7f, 0.1f), 0.3f, 1, 0.5f));
 
         if(hexaVisualMeshRenderers.Count > 0)
         {
             foreach (var meshRenderer in hexaVisualMeshRenderers)
             {
-                // Vurulduklarında efekt olması için rengi biraz açıp  tekrar kapatıyoruz.
+                if (meshRenderer == null)
+                {
+                    continue;
+                }
 
                 var sharedMaterial = meshRenderer.sharedMaterial;
                 var originalColor = sharedMaterial.GetColor("_BaseColor");
                 var hitColor = Color.gray;
 
-                sequence.Join(meshRenderer.material.DOColor(hitColor, "_BaseColor", 0.1f).SetEase(Ease.OutQuad)
+                var materialInstance = meshRenderer.material;
+                if (!animatedMaterials.Contains(materialInstance))
+                {
+                    animatedMaterials.Add(materialInstance);
+                }
+
+                hitSequence.Join(materialInstance.DOColor(hitColor, "_BaseColor", 0.15f))
                 .OnComplete(() =>
                 {
-                    meshRenderer.material.DOColor(originalColor, "_BaseColor", 0.1f).SetEase(Ease.InQuad);
-                }));
+                    materialInstance.DOColor(originalColor, "_BaseColor", 0.15f);
+                });
             }
         }
 
-        sequence.AppendCallback(() =>
+        hitSequence.AppendCallback(() =>
         {
             health = Mathf.Max(0, health - (int)damage);
             SyncHealthVisuals();
 
             if (health <= 0)
             {
-                Destroy(gameObject);
+                StopActiveTweens();
+                gameObject.SetActive(false);
             }
         });
     }
 
+    private void StopActiveTweens()
+    {
+        if (hitSequence != null)
+        {
+            hitSequence.Kill();
+            hitSequence = null;
+        }
+
+        DOTween.Kill(transform);
+
+        for (int i = animatedMaterials.Count - 1; i >= 0; i--)
+        {
+            var material = animatedMaterials[i];
+            if (material != null)
+            {
+                DOTween.Kill(material);
+            }
+        }
+
+        animatedMaterials.Clear();
+    }
+
+    private void OnDisable()
+    {
+        StopActiveTweens();
+    }
 
     private void SyncHealthVisuals()
     {
@@ -241,6 +287,7 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
 
     public void Crashed()
     {
-        Destroy(gameObject);
+        StopActiveTweens();
+        gameObject.SetActive(false);
     }
 }
