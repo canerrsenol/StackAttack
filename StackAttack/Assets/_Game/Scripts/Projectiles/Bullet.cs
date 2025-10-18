@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class Bullet : ProjectileBase
 {
-    [SerializeField] private float speed = 10f;
     private BulletPool bulletPool;
     private Rigidbody rb;
     private float arrivedTime = 0f;
-    [SerializeField] private float lifeTime = 1.5f;
+    [SerializeField] private BulletSettings bulletSettings;
 
     void Awake()
     {
@@ -20,7 +19,7 @@ public class Bullet : ProjectileBase
         rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.linearVelocity = transform.forward * speed;
+            rb.linearVelocity = transform.forward * bulletSettings.speed;
         }
 
         arrivedTime = 0f;
@@ -29,7 +28,7 @@ public class Bullet : ProjectileBase
     void Update()
     {
         arrivedTime += Time.deltaTime;
-        if (arrivedTime >= lifeTime)
+        if (arrivedTime >= bulletSettings.lifeTime)
         {
             arrivedTime = 0f;
             rb.linearVelocity = Vector3.zero;

@@ -75,7 +75,7 @@ MonoBehaviour:
   hexaVisual: {fileID: 6279952840272651576, guid: ae92ef62bce191943ac0b9005ee85f8d, type: 3}
   healthText: {fileID: 3302951918028395965}
   yOffset: 0.4
-  hexaHealthMultiplier: 2
+  hexaHealthMultiplier: 1
   hexaVisualMeshRenderers: []
   materialsSO: {fileID: 11400000, guid: fa320cf17ff47674ea2263171b51d3fe, type: 2}
 --- !u!1 &5267447466670020057

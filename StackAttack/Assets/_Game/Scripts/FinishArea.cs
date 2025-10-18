@@ -40,7 +40,7 @@ public class FinishArea : MonoBehaviour
         float progress = Mathf.InverseLerp(0f, finishZ, playerCurrentZ);
         fillImage.fillAmount = progress;
 
-        if(progress == 0f)
+        if(progress >= 1f)
         {
             gameManager.ChangeGameState(GameState.Win);
         }

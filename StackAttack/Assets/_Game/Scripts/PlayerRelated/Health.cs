@@ -9,6 +9,7 @@ public class Health : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        globalEventsSO.PlayerEvents.HealthChanged?.Invoke(currentHealth);
     }
 
     public void TakeDamage(int damage)

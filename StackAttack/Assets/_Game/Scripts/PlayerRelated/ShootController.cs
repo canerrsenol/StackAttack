@@ -34,13 +34,11 @@ public class ShootController : MonoBehaviour
     void OnFingerDown(LeanFinger finger)
     {
         isShooting = true;
-        shootCooldown = 0f;
     }
 
     void OnFingerUp(LeanFinger finger)
     {
         isShooting = false;
-        shootCooldown = 0f;
     }
 
     void Update()

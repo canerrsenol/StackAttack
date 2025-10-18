@@ -23,8 +23,12 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
     private readonly List<Material> animatedMaterials = new List<Material>();
     private Sequence hitSequence;
 
+    private HexaParticlePool hexaParticlePool;
+
     void Awake()
     {
+        hexaParticlePool = HexaParticlePool.Instance;
+
         if (CanSyncVisuals())
         {
             SyncHealthVisuals();
@@ -57,10 +61,24 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
     {
         StopActiveTweens();
 
-        hitSequence = DOTween.Sequence();
-        hitSequence.Append(transform.DOPunchScale(new Vector3(0.1f, .7f, 0.1f), 0.3f, 1, 0.5f));
+        transform.DOKill();
+        foreach (var material in animatedMaterials)
+        {
+            if (material != null)
+            {
+                DOTween.Kill(material);
+            }
+        }
+        transform.localScale = Vector3.one * 1.25f;
 
-        if(hexaVisualMeshRenderers.Count > 0)
+        if(hitSequence != null)
+        {
+            hitSequence.Kill();
+            hitSequence = null;
+        }
+        hitSequence = DOTween.Sequence();
+        hitSequence.Append(transform.DOPunchScale(new Vector3(0.05f, .3f, 0.05f), 0.3f, 1, 0.5f));
+        if (hexaVisualMeshRenderers.Count > 0)
         {
             foreach (var meshRenderer in hexaVisualMeshRenderers)
             {
@@ -79,25 +97,25 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
                     animatedMaterials.Add(materialInstance);
                 }
 
-                hitSequence.Join(materialInstance.DOColor(hitColor, "_BaseColor", 0.15f))
+                hitSequence.Join(materialInstance.DOColor(hitColor, "_BaseColor", 0.2f))
                 .OnComplete(() =>
                 {
-                    materialInstance.DOColor(originalColor, "_BaseColor", 0.15f);
+                    materialInstance.DOColor(originalColor, "_BaseColor", 0.2f);
                 });
             }
         }
 
         hitSequence.AppendCallback(() =>
         {
-            health = Mathf.Max(0, health - (int)damage);
-            SyncHealthVisuals();
-
             if (health <= 0)
             {
                 StopActiveTweens();
                 gameObject.SetActive(false);
             }
         });
+
+        health = Mathf.Max(0, health - (int)damage);
+        SyncHealthVisuals();
     }
 
     private void StopActiveTweens()
@@ -188,6 +206,7 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
                 var rootObject = meshRenderer.transform.parent != null
                     ? meshRenderer.transform.parent.gameObject
                     : meshRenderer.gameObject;
+                SpawnParticleAt(rootObject.transform);
                 DestroySpawnedObject(rootObject);
             }
         }
@@ -260,6 +279,29 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
         return Instantiate(hexaVisual, transform);
     }
 
+    private void SpawnParticleAt(Transform targetTransform)
+    {
+        if (!Application.isPlaying || hexaParticlePool == null || targetTransform == null)
+        {
+            return;
+        }
+
+        var particle = hexaParticlePool.GetHexaParticle();
+        if (particle == null)
+        {
+            return;
+        }
+
+        var particleTransform = particle.transform;
+        particleTransform.SetPositionAndRotation(targetTransform.position + Vector3.up * 0.5f, targetTransform.rotation);
+
+        var particleSystem = particle.GetComponent<ParticleSystem>();
+        if (particleSystem != null)
+        {
+            particleSystem.Play(true);
+        }
+    }
+
     private void DestroySpawnedObject(GameObject spawnedObject)
     {
         if (spawnedObject == null)
@@ -288,6 +330,7 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
     public void Crashed()
     {
         StopActiveTweens();
+        SpawnParticleAt(transform);
         gameObject.SetActive(false);
     }
 }
