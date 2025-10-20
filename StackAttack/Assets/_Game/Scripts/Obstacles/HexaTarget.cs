@@ -20,7 +20,6 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
     [SerializeField] private MaterialsSO materialsSO;
     public int CrashDamage => crashDamage;
 
-    private readonly List<Material> animatedMaterials = new List<Material>();
     private Sequence hitSequence;
 
     private HexaParticlePool hexaParticlePool;
@@ -62,13 +61,6 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
         StopActiveTweens();
 
         transform.DOKill();
-        foreach (var material in animatedMaterials)
-        {
-            if (material != null)
-            {
-                DOTween.Kill(material);
-            }
-        }
         transform.localScale = Vector3.one * 1.25f;
 
         if(hitSequence != null)
@@ -78,43 +70,18 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
         }
         hitSequence = DOTween.Sequence();
         hitSequence.Append(transform.DOPunchScale(new Vector3(0.05f, .3f, 0.05f), 0.3f, 1, 0.5f));
-        if (hexaVisualMeshRenderers.Count > 0)
+        health = Mathf.Max(0, health - (int)damage);
+
+        if(health <= 0)
         {
-            foreach (var meshRenderer in hexaVisualMeshRenderers)
-            {
-                if (meshRenderer == null)
-                {
-                    continue;
-                }
-
-                var sharedMaterial = meshRenderer.sharedMaterial;
-                var originalColor = sharedMaterial.GetColor("_BaseColor");
-                var hitColor = Color.gray;
-
-                var materialInstance = meshRenderer.material;
-                if (!animatedMaterials.Contains(materialInstance))
-                {
-                    animatedMaterials.Add(materialInstance);
-                }
-
-                hitSequence.Join(materialInstance.DOColor(hitColor, "_BaseColor", 0.2f))
-                .OnComplete(() =>
-                {
-                    materialInstance.DOColor(originalColor, "_BaseColor", 0.2f);
-                });
-            }
-        }
-
-        hitSequence.AppendCallback(() =>
-        {
-            if (health <= 0)
+            hitSequence.AppendCallback(() =>
             {
                 StopActiveTweens();
-                gameObject.SetActive(false);
-            }
-        });
+            });
+            
+            gameObject.SetActive(false);
+        }
 
-        health = Mathf.Max(0, health - (int)damage);
         SyncHealthVisuals();
     }
 
@@ -127,17 +94,6 @@ public class HexaTarget : MonoBehaviour, IHitable, IObstacle
         }
 
         DOTween.Kill(transform);
-
-        for (int i = animatedMaterials.Count - 1; i >= 0; i--)
-        {
-            var material = animatedMaterials[i];
-            if (material != null)
-            {
-                DOTween.Kill(material);
-            }
-        }
-
-        animatedMaterials.Clear();
     }
 
     private void OnDisable()

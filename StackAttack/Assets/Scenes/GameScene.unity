@@ -874,6 +874,10 @@ PrefabInstance:
       propertyPath: globalEventsSO
       value: 
       objectReference: {fileID: 11400000, guid: 9b252681ecc8fff4fa8a91171a5b2f38, type: 2}
+    - target: {fileID: 992929571608328650, guid: bf482d8c89b2067448997830bd86d518, type: 3}
+      propertyPath: levelEndFillImage
+      value: 
+      objectReference: {fileID: 2125494169}
     - target: {fileID: 3046933943470754767, guid: bf482d8c89b2067448997830bd86d518, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1292,8 +1296,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelList:
   - {fileID: 8840498548172085332, guid: 6849e659be3493645a01bb481fd2afcb, type: 3}
+  - {fileID: 8840498548172085332, guid: dd106fa86b2c2c149bd3b7223b0e8c91, type: 3}
+  - {fileID: 8840498548172085332, guid: 9888fed5bec5b4241a9b898d068ef2ca, type: 3}
+  - {fileID: 8840498548172085332, guid: d7ff89846d86a6b4a89b069993d2e55e, type: 3}
+  - {fileID: 8840498548172085332, guid: b250fa78f36199642bc382db0c2c8c8b, type: 3}
   secondLevelList:
   - {fileID: 8840498548172085332, guid: 6849e659be3493645a01bb481fd2afcb, type: 3}
+  - {fileID: 8840498548172085332, guid: dd106fa86b2c2c149bd3b7223b0e8c91, type: 3}
+  - {fileID: 8840498548172085332, guid: 9888fed5bec5b4241a9b898d068ef2ca, type: 3}
+  - {fileID: 8840498548172085332, guid: d7ff89846d86a6b4a89b069993d2e55e, type: 3}
+  - {fileID: 8840498548172085332, guid: b250fa78f36199642bc382db0c2c8c8b, type: 3}
 --- !u!114 &1383949227
 MonoBehaviour:
   m_ObjectHideFlags: 0
